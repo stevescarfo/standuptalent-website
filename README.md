@@ -9,6 +9,7 @@ step.
 | Home | `index.html` |
 | Privacy Policy | `privacy.html` |
 | Terms of Use | `terms.html` |
+| Comedy venues | `venues.html` (reads the live venue list from the app's database with its public key) |
 | Help & Support | `support.html` |
 | Not found | `404.html` |
 
