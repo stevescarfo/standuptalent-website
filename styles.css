@@ -96,6 +96,20 @@ details summary::after { content: '+'; color: var(--brick); font-size: 24px; lin
 details[open] summary::after { content: '–'; }
 details p { margin: 10px 0 0; color: var(--ink); }
 
+/* Venue list */
+.doc.wide { max-width: none; }
+.filters { display: flex; gap: 12px; flex-wrap: wrap; margin: 8px 0 20px; }
+.field { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.field input, .field select { font: inherit; font-size: 16px; text-transform: none; letter-spacing: 0; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 10px 16px; min-width: 220px; }
+.state-group h2 { display: flex; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.state-group h2 span { font-size: 14px; font-weight: 600; color: var(--muted); }
+.doc .venues { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.venues li { background: var(--bg); border-radius: 14px; padding: 12px 14px; max-width: none; }
+.venue-name { font-weight: 700; }
+.venue-name a { color: var(--ink); text-decoration-color: var(--brick); }
+.venue-meta { font-size: 14px; color: var(--muted); }
+.empty { color: var(--muted); }
+
 /* Footer */
 .site-footer { padding: 28px 0 40px; color: var(--muted); font-size: 15px; }
 .site-footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }

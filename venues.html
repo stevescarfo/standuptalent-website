@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comedy Venues · Stand Up Talent</title>
+<meta name="description" content="Comedy clubs, bar shows, improv theaters and open mics across the United States, from the Stand Up Talent venue list.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/icon.png" alt="">Stand Up Talent</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="venues.html" aria-current="page">Venues</a>
+      <a href="support.html">Help</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="doc wide">
+    <h1>Comedy venues</h1>
+    <p class="updated" id="summary">Loading the venue list…</p>
+    <p class="lead">Clubs, bar rooms, brewery shows, improv theaters, producers and open mics across the United States. Tap a name to visit the venue's website. The full details, maps and show schedules are in the app.</p>
+    <div class="filters">
+      <label class="field">
+        <span>Search</span>
+        <input id="q" type="search" placeholder="Venue or city" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>State</span>
+        <select id="state"><option value="">All states</option></select>
+      </label>
+    </div>
+    <div id="list" aria-live="polite"></div>
+    <div class="contact">
+      <strong>Missing a venue, or something's wrong?</strong><br>
+      Use <em>Suggest a venue</em> on the Clubs tab in the app, or email <a href="mailto:support@standuptalent.com">support@standuptalent.com</a>.
+    </div>
+  </article>
+</main>
+
+<script>
+  // The venue list is read live from the app's database with its public key
+  // (the same one the app ships with); only public venue details are readable.
+  const API = 'https://fqyfwrzwzdafqqyygvvg.supabase.co/rest/v1/clubs?select=name,city,state,venue_type,socials,ticket_url&order=state.asc,name.asc';
+  const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
+  const TYPES = { club: 'Comedy club', bar_room: 'Bar room', brewery: 'Brewery room', improv: 'Improv theater', theater: 'Theater',
+    producer: 'Producer / recurring show', pop_up: 'Pop-up shows', one_night: 'One-night show', festival: 'Festival' };
+  const STATES = { AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',
+    DC:'Washington, DC',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
+    LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',
+    NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
+    OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',
+    TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming' };
+  let venues = [];
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : null);
+
+  function render() {
+    const q = $('q').value.trim().toLowerCase();
+    const st = $('state').value;
+    const shown = venues.filter((v) => (!st || v.state === st) && (!q || (v.name + ' ' + (v.city || '')).toLowerCase().includes(q)));
+    const groups = {};
+    for (const v of shown) (groups[v.state || '—'] ||= []).push(v);
+    const order = Object.keys(groups).sort((a, b) => (STATES[a] || a).localeCompare(STATES[b] || b));
+    $('list').innerHTML = shown.length === 0
+      ? '<p class="empty">No venues match. Try another search or state.</p>'
+      : order.map((code) => `
+        <section class="state-group">
+          <h2>${esc(STATES[code] || code)} <span>${groups[code].length}</span></h2>
+          <ul class="venues">${groups[code].map((v) => {
+            const site = safeUrl(v.socials && v.socials.website);
+            const tix = safeUrl(v.ticket_url);
+            return `<li>
+              <div class="venue-name">${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</div>
+              <div class="venue-meta">${esc(TYPES[v.venue_type] || 'Comedy venue')}${v.city ? ' · ' + esc(v.city) : ''}${tix && tix !== site ? ` · <a href="${esc(tix)}" rel="noopener" target="_blank">Tickets</a>` : ''}</div>
+            </li>`;
+          }).join('')}</ul>
+        </section>`).join('');
+  }
+
+  fetch(API, { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } })
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((rows) => {
+      venues = rows;
+      const states = [...new Set(rows.map((v) => v.state).filter(Boolean))].sort((a, b) => (STATES[a] || a).localeCompare(STATES[b] || b));
+      $('state').insertAdjacentHTML('beforeend', states.map((s) => `<option value="${esc(s)}">${esc(STATES[s] || s)}</option>`).join(''));
+      const plain = states.filter((s) => s !== 'DC').length;
+      $('summary').textContent = `${rows.length} venues in ${plain} states${states.includes('DC') ? ' and DC' : ''}, updated as the list changes.`;
+      render();
+    })
+    .catch(() => {
+      $('summary').textContent = 'The venue list couldn\'t load right now. Please try again later.';
+    });
+  $('q').addEventListener('input', render);
+  $('state').addEventListener('change', render);
+</script>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Stand Up Talent</span>
+    <nav aria-label="Footer">
+      <a href="venues.html">Comedy venues</a>
+      <a href="support.html">Help &amp; Support</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
