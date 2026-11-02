@@ -28,3 +28,14 @@ AdMob publisher ID).
    - `CNAME` record for `www` pointing to `stevescarfo.github.io`.
 3. Back in **Settings → Pages**, wait for the DNS check to pass, then tick
    **Enforce HTTPS**.
+
+## Email
+
+support@standuptalent.com forwards to the team Gmail through ImprovMX (free).
+GoDaddy DNS for it:
+
+- `MX` `@` → `mx1.improvmx.com` (priority 10) and `mx2.improvmx.com` (priority 20)
+- `TXT` `@` → `v=spf1 include:spf.improvmx.com ~all`
+
+Sending app emails (Resend) uses its own records on a subdomain, so the two
+don't clash.
