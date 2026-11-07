@@ -122,3 +122,18 @@ details p { margin: 10px 0 0; color: var(--ink); }
   .hero .mic { display: none; }
   .doc { padding: 28px 20px; }
 }
+
+/* Comedian profile */
+.profile-head { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.profile-head h1 { margin: 0; }
+.profile-head .updated { margin: 6px 0 0; }
+.headshot { width: 120px; height: 120px; border-radius: 28px; object-fit: cover; background: var(--cream); }
+.headshot.initials { display: grid; place-items: center; font-size: 40px; font-weight: 800; color: var(--brick); }
+.profile-links { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 6px; }
+.profile-links .button { padding: 10px 16px; font-size: 15px; }
+.bio { white-space: pre-line; }
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; display: block; }
+.doc .shows { list-style: none; padding: 0; }
+.doc .shows li { padding: 10px 0; border-bottom: 1px solid var(--line); max-width: none; }
+.beta-note { display: inline-block; background: #F5A623; color: var(--ink); font-weight: 800; font-size: 13px; letter-spacing: .1em; padding: 4px 12px; border-radius: 999px; }
