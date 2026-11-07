@@ -28,8 +28,8 @@
   </div>
 </header>
 
-<main class="wrap">
-  <article class="doc wide">
+<main class="wrap list-wrap">
+  <article class="doc wide list-page">
     <h1>Comedy venues</h1>
     <p class="updated" id="summary">Loading the venue list…</p>
     <p class="lead">Clubs, bar rooms, brewery shows, improv theaters, producers and open mics across the United States. Tap a name to visit the venue's website. Tap a pin on the map for its name. The full details and show schedules are in the app.</p>
@@ -57,7 +57,7 @@
   // The venue list is read live from the app's database with its public key
   // (the same one the app ships with); only public venue details are readable.
   const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
-  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,socials,ticket_url&order=state.asc,name.asc';
+  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,socials,ticket_url,logo_url,show_days&order=state.asc,name.asc';
   const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
   const TYPES = { club: 'Comedy club', bar_room: 'Bar room', brewery: 'Brewery room', improv: 'Improv theater', theater: 'Theater',
     producer: 'Producer / recurring show', pop_up: 'Pop-up shows', one_night: 'One-night show', festival: 'Festival' };
@@ -88,13 +88,21 @@
       : order.map((code) => `
         <section class="state-group">
           <h2>${esc(STATES[code] || code)} <span>${groups[code].length}</span></h2>
-          <ul class="venues">${groups[code].map((v) => {
+          <ul class="rows">${groups[code].map((v) => {
             const site = safeUrl(v.socials && v.socials.website);
             const tix = safeUrl(v.ticket_url);
-            return `<li>
-              <div class="venue-name">${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</div>
-              <div class="venue-meta">${esc(TYPES[v.venue_type] || 'Comedy venue')}${v.city ? ' · ' + esc(v.city) : ''}${tix && tix !== site ? ` · <a href="${esc(tix)}" rel="noopener" target="_blank">Tickets</a>` : ''}</div>
-            </li>`;
+            const logo = safeUrl(v.logo_url);
+            const initials = v.name.split(/\s+/).filter((w) => /\w/.test(w)).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+            const where = [v.city, v.state].filter(Boolean).join(', ');
+            return `<li><div class="row">
+              <span class="photo">${logo ? `<img src="${esc(logo)}" alt="" loading="lazy">` : `<span class="initials">${esc(initials)}</span>`}</span>
+              <span class="text">
+                <span class="title">${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</span>
+                <span class="line">${esc(TYPES[v.venue_type] || 'Comedy venue')}${where ? ' · ' + esc(where) : ''}</span>
+                ${v.show_days || (tix && tix !== site) ? `<span class="line">${esc(v.show_days || '')}${v.show_days && tix && tix !== site ? ' · ' : ''}${tix && tix !== site ? `<a href="${esc(tix)}" rel="noopener" target="_blank">Tickets</a>` : ''}</span>` : ''}
+              </span>
+              ${site ? `<a class="chev" href="${esc(site)}" rel="noopener" target="_blank" aria-label="${esc(v.name)} website">›</a>` : ''}
+            </div></li>`;
           }).join('')}</ul>
         </section>`).join('');
     drawMap(shown);

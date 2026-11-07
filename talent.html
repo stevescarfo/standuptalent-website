@@ -27,8 +27,8 @@
   </div>
 </header>
 
-<main class="wrap">
-  <article class="doc wide">
+<main class="wrap list-wrap">
+  <article class="doc wide list-page">
     <h1>Comedians</h1>
     <p class="updated" id="summary">Loading comedians…</p>
     <p class="lead">Stand-up comedians on Stand Up Talent. Tap a name for their profile, press kit and upcoming shows. Agents book them, and fans follow them, in the app.</p>
@@ -42,7 +42,7 @@
         <select id="state"><option value="">All states</option></select>
       </label>
     </div>
-    <ul class="talent" id="list" aria-live="polite"></ul>
+    <ul class="rows" id="list" aria-live="polite"></ul>
   </article>
 </main>
 
@@ -70,10 +70,16 @@
     $('list').replaceChildren(...(shown.length ? shown.map((p) => {
       const initials = p.display_name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
       const where = [p.city, p.state].filter(Boolean).join(', ');
-      return el('li', {}, el('a', { href: 'comedian.html?id=' + encodeURIComponent(p.id) },
-        p.avatar_url ? el('img', { src: p.avatar_url, alt: '', loading: 'lazy' }) : el('span', { class: 'initials', text: initials }),
-        el('span', {}, el('span', { class: 'who', text: p.display_name }), el('br'),
-          el('span', { class: 'meta', text: [where, p.next_show_date ? 'Next: ' + fmtDay(p.next_show_date) + (p.next_show_venue ? ' · ' + p.next_show_venue : '') : null].filter(Boolean).join(' · ') || 'Comedian' }))));
+      const next = p.next_show_date ? 'Next: ' + fmtDay(p.next_show_date) + (p.next_show_venue ? ' · ' + p.next_show_venue : '') : null;
+      return el('li', {}, el('a', { class: 'row', href: 'comedian.html?id=' + encodeURIComponent(p.id) },
+        el('span', { class: 'photo' },
+          p.avatar_url ? el('img', { src: p.avatar_url, alt: '', loading: 'lazy' }) : el('span', { class: 'initials', text: initials }),
+          typeof p.fans === 'number' ? el('span', { class: 'caption', text: p.fans + (p.fans === 1 ? ' fan' : ' fans') }) : null),
+        el('span', { class: 'text' },
+          el('span', { class: 'title', text: p.display_name }),
+          el('span', { class: 'line', text: ['Comedian', where].filter(Boolean).join(' · ') }),
+          next ? el('span', { class: 'line', text: next }) : null),
+        el('span', { class: 'chev', 'aria-hidden': 'true', text: '›' })));
     }) : [el('li', { class: 'empty', text: 'No comedians match. Try another search or state.' })]));
   }
 
