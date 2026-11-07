@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/leaflet/leaflet.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,6 +19,7 @@
     <a class="brand" href="./"><img src="assets/icon.png" alt="">Stand Up Talent</a>
     <nav class="site-nav" aria-label="Main">
       <a href="./">Home</a>
+      <a href="talent.html">Talent</a>
       <a href="venues.html" aria-current="page">Venues</a>
       <a href="support.html">Help</a>
       <a href="privacy.html">Privacy</a>
@@ -30,7 +32,7 @@
   <article class="doc wide">
     <h1>Comedy venues</h1>
     <p class="updated" id="summary">Loading the venue list…</p>
-    <p class="lead">Clubs, bar rooms, brewery shows, improv theaters, producers and open mics across the United States. Tap a name to visit the venue's website. The full details, maps and show schedules are in the app.</p>
+    <p class="lead">Clubs, bar rooms, brewery shows, improv theaters, producers and open mics across the United States. Tap a name to visit the venue's website. Tap a pin on the map for its name. The full details and show schedules are in the app.</p>
     <div class="filters">
       <label class="field">
         <span>Search</span>
@@ -41,6 +43,7 @@
         <select id="state"><option value="">All states</option></select>
       </label>
     </div>
+    <div id="map" class="venue-map" role="region" aria-label="Map of the venues shown"></div>
     <div id="list" aria-live="polite"></div>
     <div class="contact">
       <strong>Missing a venue, or something's wrong?</strong><br>
@@ -49,10 +52,12 @@
   </article>
 </main>
 
+<script src="assets/leaflet/leaflet.js"></script>
 <script>
   // The venue list is read live from the app's database with its public key
   // (the same one the app ships with); only public venue details are readable.
-  const API = 'https://fqyfwrzwzdafqqyygvvg.supabase.co/rest/v1/clubs?select=name,city,state,venue_type,socials,ticket_url&order=state.asc,name.asc';
+  const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
+  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,socials,ticket_url&order=state.asc,name.asc';
   const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
   const TYPES = { club: 'Comedy club', bar_room: 'Bar room', brewery: 'Brewery room', improv: 'Improv theater', theater: 'Theater',
     producer: 'Producer / recurring show', pop_up: 'Pop-up shows', one_night: 'One-night show', festival: 'Festival' };
@@ -63,6 +68,10 @@
     OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',
     TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming' };
   let venues = [];
+  // Map positions come from the app's club search (public, like the list).
+  const pins = new Map();
+  let map = null;
+  let layer = null;
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : null);
@@ -88,7 +97,46 @@
             </li>`;
           }).join('')}</ul>
         </section>`).join('');
+    drawMap(shown);
   }
+
+  // The venues shown in the list, on an OpenStreetMap map (no key needed).
+  function drawMap(shown) {
+    if (!window.L) return;
+    if (!map) {
+      map = L.map('map', { scrollWheelZoom: false }).setView([39.5, -98.35], 4);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+      layer = L.layerGroup().addTo(map);
+    }
+    layer.clearLayers();
+    const points = [];
+    for (const v of shown) {
+      const pin = pins.get(v.id);
+      if (!pin) continue;
+      const site = safeUrl(v.socials && v.socials.website);
+      const marker = L.circleMarker([pin.lat, pin.lng], { radius: 7, color: '#863C2D', weight: 2, fillColor: '#994433', fillOpacity: 0.9 });
+      marker.bindPopup(`<strong>${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</strong><br>${esc([v.city, v.state].filter(Boolean).join(', '))}`);
+      marker.addTo(layer);
+      points.push([pin.lat, pin.lng]);
+    }
+    if (points.length === 1) map.setView(points[0], 12);
+    else if (points.length > 1) map.fitBounds(points, { padding: [30, 30], maxZoom: 12 });
+  }
+
+  fetch(BASE + '/rest/v1/rpc/clubs_search', {
+    method: 'POST',
+    headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ lat: null, lng: null, radius_miles: null, open_mic_only: false, state_filter: null }),
+  })
+    .then((r) => (r.ok ? r.json() : []))
+    .then((rows) => {
+      for (const c of rows) if (c.latitude != null && c.longitude != null) pins.set(c.id, { lat: c.latitude, lng: c.longitude });
+      if (venues.length) render();
+    })
+    .catch(() => {});
 
   fetch(API, { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } })
     .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
@@ -115,6 +163,7 @@
       <a href="support.html">Help &amp; Support</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="terms.html">Terms of Use</a>
+      <a href="https://stand-up-talent.expo.app">Admin</a>
     </nav>
   </div>
 </footer>

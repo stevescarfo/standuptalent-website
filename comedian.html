@@ -19,6 +19,7 @@
     <a class="brand" href="./"><img src="assets/icon.png" alt="">Stand Up Talent</a>
     <nav class="site-nav" aria-label="Main">
       <a href="./">Home</a>
+      <a href="talent.html">Talent</a>
       <a href="venues.html">Venues</a>
       <a href="support.html">Help</a>
       <a href="privacy.html">Privacy</a>
@@ -42,6 +43,7 @@
   const BASE = beta ? 'https://bzqchosraktuzpdyrvqz.supabase.co' : 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
   const KEY = beta ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6cWNob3NyYWt0dXpwZHlydnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4MTczNzcsImV4cCI6MjEwOTM5MzM3N30.NohBONtCgKm-mqBSZFLO7ADr8mOdvf_w7zBykTrSng0' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
   const handle = (params.get('u') || '').replace(/^@/, '');
+  const byId = params.get('id') || '';
   const LABELS = { epk: 'Press kit (EPK)', website: 'Website', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', x: 'X', facebook: 'Facebook' };
   const ORDER = ['epk', 'website', 'instagram', 'tiktok', 'youtube', 'x', 'facebook'];
   const root = document.getElementById('profile');
@@ -68,10 +70,12 @@
   }
 
   async function load() {
-    if (!/^[A-Za-z0-9_]{3,30}$/.test(handle)) return fail('This link is missing the comedian’s username.');
-    const people = await get('profiles?select=id,display_name,handle,avatar_url,city,state,account_type&handle=eq.' + encodeURIComponent(handle) + '&account_type=eq.comedian');
+    const validId = /^[0-9a-f-]{36}$/i.test(byId);
+    if (!validId && !/^[A-Za-z0-9_]{3,30}$/.test(handle)) return fail('This link is missing the comedian’s username.');
+    const match = validId ? 'id=eq.' + byId : 'handle=eq.' + encodeURIComponent(handle);
+    const people = await get('profiles?select=id,display_name,handle,avatar_url,city,state,account_type&' + match + '&account_type=eq.comedian');
     const p = people[0];
-    if (!p) return fail('No comedian has the username @' + handle + '.');
+    if (!p) return fail(validId ? 'This comedian couldn’t be found.' : 'No comedian has the username @' + handle + '.');
     const today = new Date().toISOString().slice(0, 10);
     const [bio, links, media, shows] = await Promise.all([
       get('comedian_profiles?select=bio&profile_id=eq.' + p.id),
@@ -111,6 +115,7 @@
       <a href="support.html">Help &amp; Support</a>
       <a href="privacy.html">Privacy Policy</a>
       <a href="terms.html">Terms of Use</a>
+      <a href="https://stand-up-talent.expo.app">Admin</a>
     </nav>
   </div>
 </footer>
