@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comedians · Stand Up Talent</title>
+<meta name="description" content="Stand-up comedians on Stand Up Talent: find comedians by name or state, see their profiles and upcoming shows.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/icon.png" alt="">Stand Up Talent</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="talent.html" aria-current="page">Talent</a>
+      <a href="venues.html">Venues</a>
+      <a href="support.html">Help</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="doc wide">
+    <h1>Comedians</h1>
+    <p class="updated" id="summary">Loading comedians…</p>
+    <p class="lead">Stand-up comedians on Stand Up Talent. Tap a name for their profile, press kit and upcoming shows. Agents book them, and fans follow them, in the app.</p>
+    <div class="filters">
+      <label class="field">
+        <span>Search</span>
+        <input id="q" type="search" placeholder="Comedian or city" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>State</span>
+        <select id="state"><option value="">All states</option></select>
+      </label>
+    </div>
+    <ul class="talent" id="list" aria-live="polite"></ul>
+  </article>
+</main>
+
+<script>
+  // Comedians, read live with the app's public key through the same search
+  // the app's Talent tab uses: only public details.
+  const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
+  const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v; else n.setAttribute(k, v);
+    }
+    for (const k of kids) if (k) n.append(k);
+    return n;
+  };
+  const fmtDay = (d) => new Date(d + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  let people = [];
+
+  function render() {
+    const q = $('q').value.trim().toLowerCase();
+    const st = $('state').value;
+    const shown = people.filter((p) => (!st || p.state === st) && (!q || (p.display_name + ' ' + (p.city || '')).toLowerCase().includes(q)));
+    $('list').replaceChildren(...(shown.length ? shown.map((p) => {
+      const initials = p.display_name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+      const where = [p.city, p.state].filter(Boolean).join(', ');
+      return el('li', {}, el('a', { href: 'comedian.html?id=' + encodeURIComponent(p.id) },
+        p.avatar_url ? el('img', { src: p.avatar_url, alt: '', loading: 'lazy' }) : el('span', { class: 'initials', text: initials }),
+        el('span', {}, el('span', { class: 'who', text: p.display_name }), el('br'),
+          el('span', { class: 'meta', text: [where, p.next_show_date ? 'Next: ' + fmtDay(p.next_show_date) + (p.next_show_venue ? ' · ' + p.next_show_venue : '') : null].filter(Boolean).join(' · ') || 'Comedian' }))));
+    }) : [el('li', { class: 'empty', text: 'No comedians match. Try another search or state.' })]));
+  }
+
+  fetch(BASE + '/rest/v1/rpc/talent_search', {
+    method: 'POST',
+    headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ q: null, state_filter: null, sort: 'name', favorites_only: false, page_size: 500, page_offset: 0, roster: null }),
+  })
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((rows) => {
+      people = rows;
+      const states = [...new Set(rows.map((p) => p.state).filter(Boolean))].sort();
+      for (const s of states) $('state').append(el('option', { value: s, text: s }));
+      $('summary').textContent = rows.length + (rows.length === 1 ? ' comedian' : ' comedians') + ', updated as people join.';
+      render();
+    })
+    .catch(() => { $('summary').textContent = 'The list couldn’t load right now. Please try again later.'; });
+  $('q').addEventListener('input', render);
+  $('state').addEventListener('change', render);
+</script>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Stand Up Talent</span>
+    <nav aria-label="Footer">
+      <a href="venues.html">Comedy venues</a>
+      <a href="support.html">Help &amp; Support</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="https://stand-up-talent.expo.app">Admin</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

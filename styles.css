@@ -110,6 +110,21 @@ details p { margin: 10px 0 0; color: var(--ink); }
 .venue-meta { font-size: 14px; color: var(--muted); }
 .empty { color: var(--muted); }
 
+/* Venue map */
+.venue-map { height: 420px; border-radius: 18px; margin: 4px 0 24px; overflow: hidden; background: var(--cream); z-index: 0; }
+.venue-map a { color: var(--brick); }
+@media (max-width: 820px) { .venue-map { height: 320px; } }
+
+/* Talent list */
+.doc .talent { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.talent li { max-width: none; }
+.talent a { display: flex; gap: 12px; align-items: center; background: var(--bg); border-radius: 14px; padding: 12px 14px; text-decoration: none; color: var(--ink); }
+.talent a:hover { background: var(--cream); }
+.talent img, .talent .initials { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; flex: none; background: var(--cream); }
+.talent .initials { display: grid; place-items: center; font-weight: 800; color: var(--brick); }
+.talent .who { font-weight: 700; }
+.talent .meta { font-size: 14px; color: var(--muted); }
+
 /* Footer */
 .site-footer { padding: 28px 0 40px; color: var(--muted); font-size: 15px; }
 .site-footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
