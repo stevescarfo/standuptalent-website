@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comedian · Stand Up Talent</title>
+<meta name="description" content="A comedian's profile on Stand Up Talent: bio, press kit, links, pictures and upcoming shows.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/icon.png" alt="">Stand Up Talent</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="venues.html">Venues</a>
+      <a href="support.html">Help</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap narrow">
+  <article class="doc profile" id="profile" aria-live="polite">
+    <p class="updated" id="status">Loading…</p>
+  </article>
+</main>
+
+<script>
+  // A comedian's public profile, read live with the app's public key (the
+  // same one the app ships with): only public details are readable, and only
+  // public shows. ?u=<username>; &beta=1 reads the Beta (test) database.
+  const params = new URLSearchParams(location.search);
+  const beta = params.get('beta') === '1';
+  const BASE = beta ? 'https://bzqchosraktuzpdyrvqz.supabase.co' : 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
+  const KEY = beta ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ6cWNob3NyYWt0dXpwZHlydnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM4MTczNzcsImV4cCI6MjEwOTM5MzM3N30.NohBONtCgKm-mqBSZFLO7ADr8mOdvf_w7zBykTrSng0' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
+  const handle = (params.get('u') || '').replace(/^@/, '');
+  const LABELS = { epk: 'Press kit (EPK)', website: 'Website', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', x: 'X', facebook: 'Facebook' };
+  const ORDER = ['epk', 'website', 'instagram', 'tiktok', 'youtube', 'x', 'facebook'];
+  const root = document.getElementById('profile');
+
+  const get = (path) => fetch(BASE + '/rest/v1/' + path, { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } }).then((r) => {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  });
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v; else n.setAttribute(k, v);
+    }
+    for (const k of kids) if (k) n.append(k);
+    return n;
+  };
+  const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : null);
+  const photo = (path) => BASE + '/storage/v1/object/public/media/' + path.split('/').map(encodeURIComponent).join('/');
+  const fmtDay = (d) => new Date(d + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+
+  function fail(text) {
+    root.replaceChildren(el('h1', { text: 'Comedian not found' }), el('p', { text }), el('p', {}, el('a', { href: './', text: 'Go to Stand Up Talent' })));
+    document.title = 'Comedian not found · Stand Up Talent';
+  }
+
+  async function load() {
+    if (!/^[A-Za-z0-9_]{3,30}$/.test(handle)) return fail('This link is missing the comedian’s username.');
+    const people = await get('profiles?select=id,display_name,handle,avatar_url,city,state,account_type&handle=eq.' + encodeURIComponent(handle) + '&account_type=eq.comedian');
+    const p = people[0];
+    if (!p) return fail('No comedian has the username @' + handle + '.');
+    const today = new Date().toISOString().slice(0, 10);
+    const [bio, links, media, shows] = await Promise.all([
+      get('comedian_profiles?select=bio&profile_id=eq.' + p.id),
+      get('social_links?select=platform,url&profile_id=eq.' + p.id),
+      get('media_items?select=kind,url,storage_path,title&profile_id=eq.' + p.id + '&order=sort_order'),
+      get('bookings?select=show_date,venue_name,city,state,ticket_url&comedian_id=eq.' + p.id + '&visibility=eq.public&show_date=gte.' + today + '&order=show_date&limit=10'),
+    ]);
+    document.title = p.display_name + ' · Stand Up Talent';
+    const where = [p.city, p.state].filter(Boolean).join(', ');
+    const header = el('div', { class: 'profile-head' },
+      p.avatar_url ? el('img', { class: 'headshot', src: p.avatar_url, alt: p.display_name, width: '120', height: '120' }) : el('div', { class: 'headshot initials', text: p.display_name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase() }),
+      el('div', {}, el('h1', { text: p.display_name }), el('p', { class: 'updated', text: ['@' + p.handle, 'Comedian', where].filter(Boolean).join(' · ') })));
+    const parts = [header];
+    if (beta) parts.unshift(el('p', { class: 'beta-note', text: 'BETA · test data' }));
+    const byPlatform = Object.fromEntries(links.map((l) => [l.platform, l.url]));
+    const linkList = ORDER.filter((k) => safeUrl(byPlatform[k])).map((k) => el('a', { class: k === 'epk' ? 'button' : 'button secondary', href: byPlatform[k], rel: 'noopener', target: '_blank', text: LABELS[k] }));
+    if (linkList.length) parts.push(el('div', { class: 'profile-links' }, ...linkList));
+    if (bio[0] && bio[0].bio) parts.push(el('h2', { text: 'About' }), el('p', { class: 'bio', text: bio[0].bio }));
+    const pictures = media.filter((m) => m.kind === 'photo' && m.storage_path);
+    if (pictures.length) parts.push(el('h2', { text: 'Pictures' }), el('div', { class: 'gallery' }, ...pictures.map((m) => el('a', { href: photo(m.storage_path), target: '_blank', rel: 'noopener' }, el('img', { src: photo(m.storage_path), alt: m.title || p.display_name, loading: 'lazy' })))));
+    const clips = media.filter((m) => m.kind !== 'photo' && safeUrl(m.url));
+    if (clips.length) parts.push(el('h2', { text: 'Clips' }), el('ul', {}, ...clips.map((m) => el('li', {}, el('a', { href: m.url, target: '_blank', rel: 'noopener', text: m.title || (m.kind === 'audio' ? 'Audio' : 'Video') })))));
+    if (shows.length) parts.push(el('h2', { text: 'Upcoming shows' }), el('ul', { class: 'shows' }, ...shows.map((s) => el('li', {},
+      el('strong', { text: fmtDay(s.show_date) }), ' · ', safeUrl(s.ticket_url) ? el('a', { href: s.ticket_url, target: '_blank', rel: 'noopener', text: s.venue_name }) : s.venue_name,
+      [s.city, s.state].filter(Boolean).length ? ' · ' + [s.city, s.state].filter(Boolean).join(', ') : ''))));
+    parts.push(el('div', { class: 'contact' }, el('strong', { text: 'Booking ' + p.display_name + '?' }), el('br'), 'Agents can see their open dates and send offers in the Stand Up Talent app.'));
+    root.replaceChildren(...parts);
+  }
+
+  load().catch(() => fail('The profile couldn’t be loaded. Try again in a moment.'));
+</script>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Stand Up Talent</span>
+    <nav aria-label="Footer">
+      <a href="venues.html">Comedy venues</a>
+      <a href="support.html">Help &amp; Support</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
