@@ -162,3 +162,12 @@ a.row:hover { background: var(--cream); }
 .row .chev { color: var(--muted); font-size: 22px; flex: none; text-decoration: none; }
 .list-page .filters, .list-page .venue-map, .list-page .state-group h2 { margin-left: 0; margin-right: 0; }
 @media (max-width: 820px) { main.list-wrap { max-width: none; } .doc.list-page { padding: 4px 0 0; } }
+
+/* How-to videos: phone-shaped videos side by side, one per row on phones. */
+.doc .videos { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+.doc .videos li { margin: 0; max-width: none; background: var(--surface); border-radius: 22px; padding: 12px 12px 16px; box-shadow: 0 1px 3px rgba(60, 40, 20, .07); }
+.videos video { width: 100%; aspect-ratio: 9 / 16; border-radius: 14px; background: var(--brick); display: block; }
+.doc .videos h2 { font-size: 18px; margin: 12px 4px 4px; }
+.videos h2 span { font-weight: 600; font-size: 14px; color: var(--muted); }
+.doc .videos p { font-size: 15px; color: var(--muted); margin: 0 4px; }
+.after-videos { margin-top: 28px; }
