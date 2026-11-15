@@ -6,12 +6,16 @@ step.
 
 | Page | File |
 | --- | --- |
-| Home | `index.html` |
+| Home | `index.html` (I'm a… switcher, app screenshots in `assets/screens/`, live numbers and shared shows from the app's public `site_stats` and `shared_shows_upcoming`) |
+| Plans | `plans.html` |
+| A shared show | `show.html?id=<show>` (`assets/show-page.js`; the app's Share links here; `&beta=1` reads the Beta test data) |
 | Privacy Policy | `privacy.html` |
 | Terms of Use | `terms.html` |
 | Comedy venues | `venues.html` (reads the live venue list from the app's database with its public key) |
 | Help & Support | `support.html` |
 | Not found | `404.html` |
+
+Every page has a social preview image, `assets/og.png`. Homepage numbers only show once they're big enough (for example, comedians from 50).
 
 `CNAME` tells GitHub Pages to serve the site on standuptalent.com.
 
