@@ -34,7 +34,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--brick); outline
 .site-header { padding: 18px 0; }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
-.brand img { width: 40px; height: 40px; border-radius: 11px; }
+.brand img { width: 40px; height: 40px; border-radius: 22.37%; } /* the app icon's corner radius */
 .site-nav { display: flex; gap: 6px; flex-wrap: wrap; }
 .site-nav a { text-decoration: none; color: var(--ink); font-weight: 600; font-size: 15px; padding: 8px 14px; border-radius: 999px; }
 .site-nav a:hover { background: rgba(255, 255, 255, .6); }
