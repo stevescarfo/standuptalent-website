@@ -8,6 +8,7 @@ step.
 | --- | --- |
 | Home | `index.html` (I'm a… switcher, app screenshots in `assets/screens/`, live numbers and shared shows from the app's public `site_stats` and `shared_shows_upcoming`) |
 | Plans | `plans.html` |
+| Getting Started | `getting-started.html` (the welcome video, then the same I'm a… switcher as the homepage with each role's how-to videos from `assets/videos/`; `#for-agents` opens a role, `#build-lineup` opens and scrolls to a video) |
 | A shared show | `show.html?id=<show>` (`assets/show-page.js`; the app's Share links here; `&beta=1` reads the Beta test data) |
 | Privacy Policy | `privacy.html` |
 | Terms of Use | `terms.html` |

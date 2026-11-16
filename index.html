@@ -101,7 +101,7 @@
         </div>
         <a class="button" href="plans.html#comedians">Compare plans</a>
       </div>
-      <div class="video-row" data-videos="getting-started my-book-comedians mic-findr open-mic-request income-expenses"></div>
+      <div class="video-row" data-videos="welcome profile my-book send-avails stage-time show-night-paid"></div>
     </div>
 
     <div class="panel" id="for-agents" role="tabpanel" aria-labelledby="tab-agents">
@@ -135,7 +135,7 @@
         </div>
         <a class="button" href="plans.html#agents">Compare plans</a>
       </div>
-      <div class="video-row" data-videos="booking-tools-agents lineups-agents getting-started"></div>
+      <div class="video-row" data-videos="welcome my-shows build-lineup run-show-night pay-the-lineup"></div>
     </div>
 
     <div class="panel" id="for-clubs" role="tabpanel" aria-labelledby="tab-clubs">
@@ -169,7 +169,7 @@
         </div>
         <a class="button" href="plans.html#clubs">Compare plans</a>
       </div>
-      <div class="video-row" data-videos="booking-tools-agents lineups-agents"></div>
+      <div class="video-row" data-videos="welcome venue-listing venue-pro"></div>
     </div>
 
     <div class="panel" id="for-fans" role="tabpanel" aria-labelledby="tab-fans">
@@ -202,7 +202,7 @@
         </div>
         <a class="button" href="plans.html#fans">See plans</a>
       </div>
-      <div class="video-row" data-videos="getting-started following-for-fans"></div>
+      <div class="video-row" data-videos="welcome never-miss-a-show comedy-near-you"></div>
     </div>
   </section>
 
@@ -295,14 +295,20 @@
 
   // ---- Getting Started videos for each audience ----
   const videos = {
-    'getting-started': 'Getting started',
-    'my-book-comedians': 'My Book for comedians',
-    'mic-findr': 'Mic Findr',
-    'open-mic-request': 'Request an open mic spot',
-    'income-expenses': 'Income & expenses',
-    'following-for-fans': 'Following, for fans',
-    'booking-tools-agents': 'Booking tools for agents',
-    'lineups-agents': 'Lineups & open mics',
+    'welcome': 'Welcome to Stand Up Talent',
+    'profile': 'Set up a profile that gets you booked',
+    'my-book': 'My Book: your calendar',
+    'send-avails': 'Send your avails',
+    'stage-time': 'Find stage time',
+    'show-night-paid': 'Show night and getting paid',
+    'my-shows': 'My Shows: your home base',
+    'build-lineup': 'Build a lineup',
+    'run-show-night': 'Run show night',
+    'pay-the-lineup': 'Pay the lineup',
+    'venue-listing': 'Get your venue listed',
+    'venue-pro': 'Venue Pro: fill the room',
+    'never-miss-a-show': 'Never miss a show',
+    'comedy-near-you': 'Find comedy near you',
   };
   document.querySelectorAll('.video-row').forEach((row) => {
     const h = document.createElement('h4');
