@@ -171,11 +171,20 @@ a.row:hover { background: var(--cream); }
 .videos h2 span { font-weight: 600; font-size: 14px; color: var(--muted); }
 .doc .videos p { font-size: 15px; color: var(--muted); margin: 0 4px; }
 .after-videos { margin-top: 28px; }
-/* Getting Started: the welcome video on its own, then the I'm a… switcher with each role's videos. */
-.doc .videos-intro { grid-template-columns: minmax(0, 300px); }
-.doc .audience { margin: 34px 0 0; }
-.doc .section-title { font-size: clamp(26px, 3.4vw, 34px); margin: 8px 0 14px; }
-.doc .panel-title { font-size: 24px; font-weight: 800; margin: 0 0 14px; }
+/* Getting Started: the welcome video beside what the app does, then each role's videos as cards. */
+.gs-hero { grid-template-columns: 300px 1fr; gap: 36px; align-items: center; }
+.gs-video video, .video-card video { display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 18px; background: #1E0E11; }
+.gs-video video { border: 8px solid #1E0E11; border-radius: 26px; box-shadow: 0 18px 40px rgba(30, 14, 17, .35); }
+.gs-hero .gs-features { margin: 0 0 18px; padding-left: 20px; max-width: 60ch; }
+.gs-hero .gs-features li { margin: 6px 0; font-size: 17px; color: rgba(255,255,255,.92); }
+.gs-hero .gs-features strong { color: #fff; }
+.gs-hero .gs-note { margin: 0; font-size: 16px; color: #F5D7B0; max-width: none; }
+.video-card h4 span { font-weight: 600; font-size: 14px; color: var(--muted); white-space: nowrap; }
+@media (max-width: 820px) {
+  .gs-hero { grid-template-columns: 1fr; }
+  .gs-video { max-width: 300px; width: 100%; justify-self: center; }
+  .feature.video-card { display: block; }
+}
 
 /* Homepage */
 .eyebrow { margin: 0 0 10px !important; font-weight: 800; font-size: 14px !important; letter-spacing: .08em; text-transform: uppercase; color: #F5D7B0 !important; }
