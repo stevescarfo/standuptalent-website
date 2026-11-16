@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Hidden for now: this page sends visitors to the homepage. To bring it back, remove the next two lines and add the Talent link back to the menus. -->
-<meta http-equiv="refresh" content="0; url=./">
-<meta name="robots" content="noindex">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Comedians · Stand Up Talent</title>
@@ -25,8 +22,8 @@
       <a href="./">Home</a>
       <a href="talent.html" aria-current="page">Talent</a>
       <a href="venues.html">Venues</a>
-      <a href="plans.html">Plans</a>
       <a href="getting-started.html">Getting Started</a>
+      <a href="plans.html">Plans</a>
       <a href="support.html">Help</a>
     </nav>
   </div>
@@ -35,76 +32,77 @@
 <main class="wrap list-wrap">
   <article class="doc wide list-page">
     <h1>Comedians</h1>
-    <p class="updated" id="summary">Loading comedians…</p>
-    <p class="lead">Stand-up comedians on Stand Up Talent. Tap a name for their profile, press kit and upcoming shows. Agents book them, and fans follow them, in the app.</p>
-    <div class="filters">
-      <label class="field">
-        <span>Search</span>
-        <input id="q" type="search" placeholder="Comedian or city" autocomplete="off">
-      </label>
-      <label class="field">
-        <span>State</span>
-        <select id="state"><option value="">All states</option></select>
-      </label>
-    </div>
-    <ul class="rows" id="list" aria-live="polite"></ul>
+    <p class="updated">Coming soon</p>
+    <p class="lead">Stand-up comedians on Stand Up Talent, with their profiles, press kits and upcoming shows. Agents book them, and fans follow them, in the app. The list opens here soon; here's a preview.</p>
+
+    <!-- A preview of the list (sample comedians), until the live list opens. -->
+    <figure class="talent-preview" aria-label="Preview of the comedian list, with sample comedians">
+      <div class="filters" aria-hidden="true">
+        <label class="field"><span>Search</span><input type="search" placeholder="Comedian or city" disabled tabindex="-1"></label>
+        <label class="field"><span>State</span><select disabled tabindex="-1"><option>All states</option></select></label>
+      </div>
+      <ul class="rows" aria-hidden="true">
+        <li><div class="row">
+          <span class="photo"><span class="initials">TH</span><span class="caption">4 fans</span></span>
+          <span class="text">
+            <span class="title">Tess Hart <span class="pro">PRO</span></span>
+            <span class="line">Comedian · Worcester, MA</span>
+            <span class="line">Next: Nov 19 · Goofs Comedy Club</span>
+          </span>
+          <span class="chev">›</span>
+        </div></li>
+        <li><div class="row">
+          <span class="photo"><span class="initials">MR</span><span class="caption">6 fans</span></span>
+          <span class="text">
+            <span class="title">Maya Rivers <span class="pro">PRO</span></span>
+            <span class="line">Comedian · Boston, MA</span>
+            <span class="line">Next: Nov 19 · The Comedy Studio</span>
+          </span>
+          <span class="chev">›</span>
+        </div></li>
+        <li><div class="row">
+          <span class="photo"><span class="initials">JB</span><span class="caption">7 fans</span></span>
+          <span class="text">
+            <span class="title">Jordan Blake</span>
+            <span class="line">Comedian · Providence, RI</span>
+            <span class="line">Next: Nov 19 · The Wilbur</span>
+          </span>
+          <span class="chev">›</span>
+        </div></li>
+        <li><div class="row">
+          <span class="photo"><span class="initials">MC</span><span class="caption">6 fans</span></span>
+          <span class="text">
+            <span class="title">Marcus Cole</span>
+            <span class="line">Comedian · Manchester, NH</span>
+            <span class="line">Next: Nov 24 · Goofs Comedy Club</span>
+          </span>
+          <span class="chev">›</span>
+        </div></li>
+        <li><div class="row">
+          <span class="photo"><span class="initials">PS</span><span class="caption">5 fans</span></span>
+          <span class="text">
+            <span class="title">Priya Shah</span>
+            <span class="line">Comedian · Portland, ME</span>
+            <span class="line">Next: Nov 23 · Giggles Comedy Club</span>
+          </span>
+          <span class="chev">›</span>
+        </div></li>
+        <li><div class="row">
+          <span class="photo"><span class="initials">JT</span><span class="caption">3 fans</span></span>
+          <span class="text">
+            <span class="title">Jamie Torres</span>
+            <span class="line">Comedian · Boston, MA</span>
+            <span class="line">Next: Dec 4 · Laugh Boston</span>
+          </span>
+          <span class="chev">›</span>
+        </div></li>
+      </ul>
+      <figcaption class="preview-badge">Preview · sample comedians</figcaption>
+    </figure>
+
+    <p class="after-videos">Want to be on it? <a href="./#get">Get the app</a> and set up your comedian profile. See <a href="getting-started.html#for-comedians">Getting Started</a> for how.</p>
   </article>
 </main>
-
-<script>
-  // Comedians, read live with the app's public key through the same search
-  // the app's Talent tab uses: only public details.
-  const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
-  const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
-  const $ = (id) => document.getElementById(id);
-  const el = (tag, attrs = {}, ...kids) => {
-    const n = document.createElement(tag);
-    for (const [k, v] of Object.entries(attrs)) {
-      if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v; else n.setAttribute(k, v);
-    }
-    for (const k of kids) if (k) n.append(k);
-    return n;
-  };
-  const fmtDay = (d) => new Date(d + 'T12:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-  let people = [];
-
-  function render() {
-    const q = $('q').value.trim().toLowerCase();
-    const st = $('state').value;
-    const shown = people.filter((p) => (!st || p.state === st) && (!q || (p.display_name + ' ' + (p.city || '')).toLowerCase().includes(q)));
-    $('list').replaceChildren(...(shown.length ? shown.map((p) => {
-      const initials = p.display_name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
-      const where = [p.city, p.state].filter(Boolean).join(', ');
-      const next = p.next_show_date ? 'Next: ' + fmtDay(p.next_show_date) + (p.next_show_venue ? ' · ' + p.next_show_venue : '') : null;
-      return el('li', {}, el('a', { class: 'row', href: 'comedian.html?id=' + encodeURIComponent(p.id) },
-        el('span', { class: 'photo' },
-          p.avatar_url ? el('img', { src: p.avatar_url, alt: '', loading: 'lazy' }) : el('span', { class: 'initials', text: initials }),
-          typeof p.fans === 'number' ? el('span', { class: 'caption', text: p.fans + (p.fans === 1 ? ' fan' : ' fans') }) : null),
-        el('span', { class: 'text' },
-          el('span', { class: 'title', text: p.display_name }),
-          el('span', { class: 'line', text: ['Comedian', where].filter(Boolean).join(' · ') }),
-          next ? el('span', { class: 'line', text: next }) : null),
-        el('span', { class: 'chev', 'aria-hidden': 'true', text: '›' })));
-    }) : [el('li', { class: 'empty', text: 'No comedians match. Try another search or state.' })]));
-  }
-
-  fetch(BASE + '/rest/v1/rpc/talent_search', {
-    method: 'POST',
-    headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ q: null, state_filter: null, sort: 'name', favorites_only: false, page_size: 500, page_offset: 0, roster: null }),
-  })
-    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-    .then((rows) => {
-      people = rows;
-      const states = [...new Set(rows.map((p) => p.state).filter(Boolean))].sort();
-      for (const s of states) $('state').append(el('option', { value: s, text: s }));
-      $('summary').textContent = rows.length + (rows.length === 1 ? ' comedian' : ' comedians') + ', updated as people join.';
-      render();
-    })
-    .catch(() => { $('summary').textContent = 'The list couldn’t load right now. Please try again later.'; });
-  $('q').addEventListener('input', render);
-  $('state').addEventListener('change', render);
-</script>
 
 <footer class="site-footer">
   <div class="wrap">
