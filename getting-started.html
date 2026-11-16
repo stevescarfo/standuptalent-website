@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Getting Started · Stand Up Talent</title>
-<meta name="description" content="Short videos on getting started with Stand Up Talent: the basics, My Book and income and expenses for comedians, and booking tools for agents.">
+<meta name="description" content="Short how-to videos for Stand Up Talent, for comedians, agents and producers, clubs and venues, and fans.">
 <meta property="og:image" content="https://standuptalent.com/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.png">
@@ -32,65 +32,144 @@
 <main class="wrap list-wrap">
   <article class="doc wide list-page">
     <h1>Getting Started</h1>
-    <p class="updated">About a minute each, with captions and a voiceover.</p>
-    <ul class="videos">
-      <li class="video" id="getting-started">
-        <video controls playsinline preload="none" poster="assets/videos/getting-started.jpg" aria-label="Getting started">
-          <source src="assets/videos/getting-started.mp4" type="video/mp4">
-        </video>
-        <h2>Getting started <span>1:12</span></h2>
-        <p>Sign up, pick your account type, set up your profile, find comedians and clubs, add favorites and send a message.</p>
-      </li>
-      <li class="video" id="following-for-fans">
-        <video controls playsinline preload="none" poster="assets/videos/following-for-fans.jpg" aria-label="Following comics and clubs, for fans">
-          <source src="assets/videos/following-for-fans.mp4" type="video/mp4">
-        </video>
-        <h2>Following comics &amp; clubs, for fans <span>1:00</span></h2>
-        <p>Follow comedians and clubs, message a comic, see only your favorites, turn show alerts on or off and check your Alerts.</p>
-      </li>
-      <li class="video" id="my-book-comedians">
-        <video controls playsinline preload="none" poster="assets/videos/my-book-comedians.jpg" aria-label="My Book for comedians">
-          <source src="assets/videos/my-book-comedians.mp4" type="video/mp4">
-        </video>
-        <h2>My Book for comedians <span>1:06</span></h2>
-        <p>Keep your calendar up to date, add shows, send your avails to agents in the app or anywhere, and handle offers.</p>
-      </li>
-      <li class="video" id="mic-findr">
-        <video controls playsinline preload="none" poster="assets/videos/mic-findr.jpg" aria-label="Mic Findr">
-          <source src="assets/videos/mic-findr.mp4" type="video/mp4">
-        </video>
-        <h2>Mic Findr <span>0:50</span></h2>
-        <p>Find open mics near you by night and distance, get the sign-up details, message the booker and suggest a missing mic.</p>
-      </li>
-      <li class="video" id="open-mic-request">
-        <video controls playsinline preload="none" poster="assets/videos/open-mic-request.jpg" aria-label="Request an open mic spot">
-          <source src="assets/videos/open-mic-request.mp4" type="video/mp4">
-        </video>
-        <h2>Request an open mic spot <span>0:51</span></h2>
-        <p>Find a night in Mic Findr, see the spots left, request a spot with a note, and get your spot and time when the booker accepts.</p>
-      </li>
-      <li class="video" id="income-expenses">
-        <video controls playsinline preload="none" poster="assets/videos/income-expenses.jpg" aria-label="Income &amp; expenses">
-          <source src="assets/videos/income-expenses.mp4" type="video/mp4">
-        </video>
-        <h2>Income &amp; expenses <span>1:20</span></h2>
-        <p>Log pay, miles and travel costs for every show, open mics too, see your totals and export a CSV for tax time.</p>
-      </li>
-      <li class="video" id="booking-tools-agents">
-        <video controls playsinline preload="none" poster="assets/videos/booking-tools-agents.jpg" aria-label="Booking tools for agents">
-          <source src="assets/videos/booking-tools-agents.mp4" type="video/mp4">
-        </video>
-        <h2>Booking tools for agents <span>1:01</span></h2>
-        <p>My bookings and offers, rosters, finding a comic’s open dates, sending offers and your avails inbox.</p>
-      </li>
-      <li class="video" id="lineups-agents">
-        <video controls playsinline preload="none" poster="assets/videos/lineups-agents.jpg" aria-label="Lineups and open mics for agents">
-          <source src="assets/videos/lineups-agents.mp4" type="video/mp4">
-        </video>
-        <h2>Lineups &amp; open mics for agents <span>1:35</span></h2>
-        <p>Search talent, build rosters, message comics, create a show or open mic, fill and drag the lineup, and see what comedians see.</p>
-      </li>
+    <p class="updated">Short videos, about a minute each, with captions and a voiceover.</p>
+
+    <ul class="videos videos-intro">
+        <li class="video" id="welcome">
+          <video controls playsinline preload="none" poster="assets/videos/welcome.jpg" aria-label="Welcome to Stand Up Talent">
+            <source src="assets/videos/welcome.mp4" type="video/mp4">
+          </video>
+          <h2>Welcome to Stand Up Talent <span>0:40</span></h2>
+          <p>Comedians, agents, clubs and fans, all in one app. What you get, and why to join.</p>
+        </li>
     </ul>
+
+    <!-- I'm a… : the same switcher as the homepage; each role sees its own videos. -->
+    <section id="how" class="audience">
+      <h2 class="section-title">I'm a…</h2>
+      <div class="switcher" role="tablist" aria-label="Who are you?">
+      <button role="tab" id="tab-comedians" aria-controls="for-comedians" aria-selected="true">Comedian</button>
+      <button role="tab" id="tab-agents" aria-controls="for-agents" aria-selected="false" tabindex="-1">Agent or producer</button>
+      <button role="tab" id="tab-clubs" aria-controls="for-clubs" aria-selected="false" tabindex="-1">Club or venue</button>
+      <button role="tab" id="tab-fans" aria-controls="for-fans" aria-selected="false" tabindex="-1">Fan</button>
+      </div>
+
+    <div class="panel" id="for-comedians" role="tabpanel" aria-labelledby="tab-comedians">
+      <h3 class="panel-title">Get booked. Get paid. Get seen.</h3>
+      <ul class="videos">
+        <li class="video" id="profile">
+          <video controls playsinline preload="none" poster="assets/videos/profile.jpg" aria-label="Set up a profile that gets you booked">
+            <source src="assets/videos/profile.mp4" type="video/mp4">
+          </video>
+          <h2>Set up a profile that gets you booked <span>0:55</span></h2>
+          <p>Photo, media, bio, credits and tags, fan draw and recommendations. Then add your links and share it.</p>
+        </li>
+        <li class="video" id="my-book">
+          <video controls playsinline preload="none" poster="assets/videos/my-book.jpg" aria-label="My Book: your calendar">
+            <source src="assets/videos/my-book.mp4" type="video/mp4">
+          </video>
+          <h2>My Book: your calendar <span>0:51</span></h2>
+          <p>What the colors mean, tap a date to mark it Available or Blocked, add a booking, and see tonight’s show.</p>
+        </li>
+        <li class="video" id="send-avails">
+          <video controls playsinline preload="none" poster="assets/videos/send-avails.jpg" aria-label="Send your avails">
+            <source src="assets/videos/send-avails.mp4" type="video/mp4">
+          </video>
+          <h2>Send your avails <span>0:48</span></h2>
+          <p>Pick your dates, send to the same agents as last time or anyone on the app, and see who’s seen it.</p>
+        </li>
+        <li class="video" id="stage-time">
+          <video controls playsinline preload="none" poster="assets/videos/stage-time.jpg" aria-label="Find stage time: open mics and open calls">
+            <source src="assets/videos/stage-time.mp4" type="video/mp4">
+          </video>
+          <h2>Find stage time: open mics and open calls <span>0:50</span></h2>
+          <p>Mic Findr by night and distance, request a spot or use the code at the door, and apply to open calls.</p>
+        </li>
+        <li class="video" id="show-night-paid">
+          <video controls playsinline preload="none" poster="assets/videos/show-night-paid.jpg" aria-label="Show night and getting paid">
+            <source src="assets/videos/show-night-paid.mp4" type="video/mp4">
+          </video>
+          <h2>Show night and getting paid <span>0:50</span></h2>
+          <p>The call sheet, the lineup, follow the show live, Request payment, Mark received, and income and miles.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="for-agents" role="tabpanel" aria-labelledby="tab-agents">
+      <h3 class="panel-title">Book the lineup. Run the night.</h3>
+      <ul class="videos">
+        <li class="video" id="my-shows">
+          <video controls playsinline preload="none" poster="assets/videos/my-shows.jpg" aria-label="My Shows: your home base">
+            <source src="assets/videos/my-shows.mp4" type="video/mp4">
+          </video>
+          <h2>My Shows: your home base <span>0:40</span></h2>
+          <p>Tonight’s show, comics waiting on pay, your booking tools and everything coming up.</p>
+        </li>
+        <li class="video" id="build-lineup">
+          <video controls playsinline preload="none" poster="assets/videos/build-lineup.jpg" aria-label="Build a lineup">
+            <source src="assets/videos/build-lineup.mp4" type="video/mp4">
+          </video>
+          <h2>Build a lineup <span>1:04</span></h2>
+          <p>Create a show, set the spots, fill them, set times and order, accept open mic requests and find more talent.</p>
+        </li>
+        <li class="video" id="run-show-night">
+          <video controls playsinline preload="none" poster="assets/videos/run-show-night.jpg" aria-label="Run show night">
+            <source src="assets/videos/run-show-night.mp4" type="video/mp4">
+          </video>
+          <h2>Run show night <span>0:54</span></h2>
+          <p>Call sheet and reminders, walk-in QR sign-up or a lottery, the live timer, and sharing the show.</p>
+        </li>
+        <li class="video" id="pay-the-lineup">
+          <video controls playsinline preload="none" poster="assets/videos/pay-the-lineup.jpg" aria-label="Pay the lineup, and find talent faster">
+            <source src="assets/videos/pay-the-lineup.mp4" type="video/mp4">
+          </video>
+          <h2>Pay the lineup, and find talent faster <span>0:42</span></h2>
+          <p>Pay with Venmo and mark it sent, then rosters, open calls and team logins.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="for-clubs" role="tabpanel" aria-labelledby="tab-clubs">
+      <h3 class="panel-title">Get found. Fill the room.</h3>
+      <ul class="videos">
+        <li class="video" id="venue-listing">
+          <video controls playsinline preload="none" poster="assets/videos/venue-listing.jpg" aria-label="Get your venue on Stand Up Talent">
+            <source src="assets/videos/venue-listing.mp4" type="video/mp4">
+          </video>
+          <h2>Get your venue on Stand Up Talent <span>0:47</span></h2>
+          <p>Find your room, keep its details current, claim it in My venues, suggest a new one, and run your own open mic.</p>
+        </li>
+        <li class="video" id="venue-pro">
+          <video controls playsinline preload="none" poster="assets/videos/venue-pro.jpg" aria-label="Venue Pro: fill the room">
+            <source src="assets/videos/venue-pro.mp4" type="video/mp4">
+          </video>
+          <h2>Venue Pro: fill the room <span>0:36</span></h2>
+          <p>The Featured badge at the top of Clubs, “Booked by” you, fan draw, what it costs and how to turn it on.</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel" id="for-fans" role="tabpanel" aria-labelledby="tab-fans">
+      <h3 class="panel-title">Never miss a show.</h3>
+      <ul class="videos">
+        <li class="video" id="never-miss-a-show">
+          <video controls playsinline preload="none" poster="assets/videos/never-miss-a-show.jpg" aria-label="Never miss a show">
+            <source src="assets/videos/never-miss-a-show.mp4" type="video/mp4">
+          </video>
+          <h2>Never miss a show <span>0:46</span></h2>
+          <p>Follow comedians and clubs, choose your alerts, see what’s coming up and get tickets.</p>
+        </li>
+        <li class="video" id="comedy-near-you">
+          <video controls playsinline preload="none" poster="assets/videos/comedy-near-you.jpg" aria-label="Find comedy near you">
+            <source src="assets/videos/comedy-near-you.mp4" type="video/mp4">
+          </video>
+          <h2>Find comedy near you <span>0:40</span></h2>
+          <p>The Clubs map, distance and favorites, Mic Findr for open mics, and club pages.</p>
+        </li>
+      </ul>
+    </div>
+    </section>
+
     <p class="after-videos">Still stuck? See <a href="support.html">Help &amp; Support</a> or email <a href="mailto:support@standuptalent.com">support@standuptalent.com</a>.</p>
   </article>
 </main>
@@ -109,5 +188,37 @@
     </nav>
   </div>
 </footer>
+<script>
+(function () {
+  // ---- I'm a… switcher (same as the homepage, and it remembers the choice) ----
+  const tabs = [...document.querySelectorAll('.switcher [role="tab"]')];
+  const pick = (tab, focus) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    // Stop a video that's playing in a panel you leave.
+    document.querySelectorAll('.panel[hidden] video').forEach((v) => v.pause());
+    if (focus) tab.focus();
+    try { localStorage.setItem('sut-audience', tab.id); } catch (e) {}
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => pick(t));
+    t.addEventListener('keydown', (e) => {
+      const n = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (n) { e.preventDefault(); pick(tabs[(i + n + tabs.length) % tabs.length], true); }
+    });
+  });
+  // Opens on: a video's link (#build-lineup), a role (#for-agents), the remembered role, or Comedian.
+  const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+  const panel = target && (target.classList.contains('panel') ? target : target.closest('.panel'));
+  let start = panel ? document.getElementById(panel.getAttribute('aria-labelledby')) : null;
+  if (!start) { try { start = document.getElementById(localStorage.getItem('sut-audience')); } catch (e) {} }
+  pick(tabs.includes(start) ? start : tabs[0]);
+  if (target) target.scrollIntoView();
+})();
+</script>
 </body>
 </html>
