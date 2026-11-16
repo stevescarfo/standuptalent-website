@@ -23,8 +23,8 @@
       <a href="./">Home</a>
       <a href="talent.html">Talent</a>
       <a href="venues.html">Venues</a>
-      <a href="plans.html">Plans</a>
       <a href="getting-started.html">Getting Started</a>
+      <a href="plans.html">Plans</a>
       <a href="support.html">Help</a>
     </nav>
   </div>
@@ -76,7 +76,9 @@
     if (!validId && !/^[A-Za-z0-9_]{3,30}$/.test(handle)) return fail('This link is missing the comedian’s username.');
     const match = validId ? 'id=eq.' + byId : 'handle=eq.' + encodeURIComponent(handle);
     const people = await get('profiles?select=id,display_name,handle,avatar_url,city,state,account_type&' + match + '&account_type=eq.comedian');
-    const p = people[0];
+    // Test accounts kept off the website (the app's own hiding comes later).
+    const HIDDEN = ['b99c649e-c8f6-4bc9-94b5-4fad5af005eb'];
+    const p = people.find((x) => !HIDDEN.includes(x.id));
     if (!p) return fail(validId ? 'This comedian couldn’t be found.' : 'No comedian has the username @' + handle + '.');
     const today = new Date().toISOString().slice(0, 10);
     const [bio, links, media, shows] = await Promise.all([

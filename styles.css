@@ -297,3 +297,10 @@ a.row:hover { background: var(--cream); }
 .show-page .lineup .role { color: var(--muted); font-size: 15px; }
 .get-app { background: var(--cream); border-radius: 18px; padding: 18px 20px; margin-top: 28px; }
 .get-app p { margin: 0 0 10px; }
+
+/* Talent page preview: sample rows under a fade, until the live list opens. */
+.talent-preview { position: relative; margin: 8px 0 0; pointer-events: none; user-select: none; }
+.talent-preview .rows { opacity: .8; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.talent-preview .pro { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #F5A623; color: var(--ink); font-size: 11px; font-weight: 800; vertical-align: 2px; }
+.preview-badge { position: absolute; left: 50%; bottom: 18%; transform: translateX(-50%); background: var(--brick); color: #fff; font-weight: 800; font-size: 15px;
+  padding: 10px 20px; border-radius: 999px; box-shadow: 0 8px 20px rgba(60, 40, 20, .2); white-space: nowrap; }
