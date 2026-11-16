@@ -8,6 +8,7 @@ step.
 | --- | --- |
 | Home | `index.html` (I'm a… switcher, app screenshots in `assets/screens/`, live numbers and shared shows from the app's public `site_stats` and `shared_shows_upcoming`) |
 | Plans | `plans.html` |
+| Talent (hidden for now) | `talent.html` sends visitors to the homepage and isn't in the menus. To bring it back, remove the redirect lines at the top of its `<head>` and add `<a href="talent.html">Talent</a>` back to each page's menu. |
 | Getting Started | `getting-started.html` (the welcome video beside what the app does, then the homepage's I'm a… switcher with each role's how-to videos from `assets/videos/` as cards; `#for-agents` opens a role, `#build-lineup` opens and scrolls to a video) |
 | A shared show | `show.html?id=<show>` (`assets/show-page.js`; the app's Share links here; `&beta=1` reads the Beta test data) |
 | Privacy Policy | `privacy.html` |
