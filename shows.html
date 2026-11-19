@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comedy Shows, Clubs and Open Mics · Stand Up Talent</title>
+<meta name="description" content="Comedy shows tonight, comedy clubs, open mics and festivals across the United States, from Stand Up Talent.">
+<meta property="og:image" content="https://standuptalent.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/leaflet/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./"><img src="assets/icon.png" alt="">Stand Up Talent</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="./">Home</a>
+      <a href="talent.html">Talent</a>
+      <a href="shows.html" aria-current="page">Shows</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="plans.html">Plans</a>
+      <a href="support.html">Help</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap list-wrap">
+  <article class="doc wide list-page">
+    <h1>Comedy shows</h1>
+    <p class="lead">Comedy near you tonight, every club on the map, open mics by night, and festivals taking submissions, the same as the Shows tab in the app.</p>
+    <div class="switcher" role="tablist" aria-label="Shows">
+      <button role="tab" id="tab-tonight" aria-controls="p-tonight" aria-selected="true">Tonight</button>
+      <button role="tab" id="tab-clubs" aria-controls="p-clubs" aria-selected="false" tabindex="-1">Clubs</button>
+      <button role="tab" id="tab-open-mics" aria-controls="p-open-mics" aria-selected="false" tabindex="-1">Open Mics</button>
+      <button role="tab" id="tab-festivals" aria-controls="p-festivals" aria-selected="false" tabindex="-1">Festivals</button>
+    </div>
+
+    <section class="panel" id="p-tonight" role="tabpanel" aria-labelledby="tab-tonight">
+      <div class="chips" role="group" aria-label="When">
+        <button class="chip on" data-when="tonight">Tonight</button>
+        <button class="chip" data-when="tomorrow">Tomorrow</button>
+        <button class="chip" data-when="week">This week</button>
+      </div>
+      <div class="filters">
+        <label class="field"><span>Search</span><input id="t-q" type="search" placeholder="Show, venue, city or comic" autocomplete="off"></label>
+        <label class="field"><span>State</span><select id="t-state"><option value="">Near me</option></select></label>
+        <label class="field" id="t-range-field"><span>Distance</span>
+          <select id="t-range"><option value="5">5 miles</option><option value="10">10 miles</option><option value="25" selected>25 miles</option><option value="50">50 miles</option><option value="100">100 miles</option><option value="">Any distance</option></select>
+        </label>
+      </div>
+      <p class="updated" id="t-note"></p>
+      <div id="t-list" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="p-clubs" role="tabpanel" aria-labelledby="tab-clubs" hidden>
+      <p class="updated" id="summary">Loading the club list…</p>
+      <div class="filters">
+        <label class="field"><span>Search</span><input id="q" type="search" placeholder="Venue or city" autocomplete="off"></label>
+        <label class="field"><span>State</span><select id="state"><option value="">All states</option></select></label>
+      </div>
+      <div id="map" class="venue-map" role="region" aria-label="Map of the venues shown"></div>
+      <div id="list" aria-live="polite"></div>
+      <div class="contact">
+        <strong>Missing a venue, or something's wrong?</strong><br>
+        Use <em>Suggest a venue</em> under Shows → Clubs in the app, or email <a href="mailto:support@standuptalent.com">support@standuptalent.com</a>.
+      </div>
+    </section>
+
+    <section class="panel" id="p-open-mics" role="tabpanel" aria-labelledby="tab-open-mics" hidden>
+      <p class="updated" id="m-summary">Loading open mics…</p>
+      <div class="chips" role="group" aria-label="Night" id="m-nights"></div>
+      <div class="filters">
+        <label class="field"><span>Search</span><input id="m-q" type="search" placeholder="Venue or city" autocomplete="off"></label>
+        <label class="field"><span>State</span><select id="m-state"><option value="">All states</option></select></label>
+      </div>
+      <div id="m-list" aria-live="polite"></div>
+      <p class="updated">In the app, Open Mic Findr sorts them by distance, and you can request a spot or scan the code at the door.</p>
+    </section>
+
+    <section class="panel" id="p-festivals" role="tabpanel" aria-labelledby="tab-festivals" hidden>
+      <div class="teaser">
+        <img src="assets/screens/comic-festivals.jpg" alt="The Festivals board in the app: festivals, contests and showcases with deadlines and entry fees" width="300" height="649" loading="lazy">
+        <div>
+          <h2>Festivals, contests and showcases</h2>
+          <p>The Festivals board lists comedy festivals, contests and showcases taking submissions across the country, with the deadline, the entry fee and how to apply. It's for members, and joining is free.</p>
+          <ul>
+            <li>Save a festival and get a reminder a week before it closes, and the day before.</li>
+            <li>Apply in a few taps: email festivals get your submission ready to send, and the rest come with a kit to copy your bio, credits and clips from.</li>
+            <li>Track every submission in Applied, and add accepted dates to My Book.</li>
+            <li>Agents and producers can post their own festival and take submissions in the app.</li>
+          </ul>
+          <p><a class="button" href="getting-started.html">Get started</a></p>
+        </div>
+      </div>
+    </section>
+  </article>
+</main>
+
+<script src="assets/leaflet/leaflet.js"></script>
+<script>
+  // Everything here is read live from the app's database with its public key
+  // (the same one the app ships with); only public details are readable.
+  const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
+  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,socials,ticket_url,logo_url,show_days&order=state.asc,name.asc';
+  const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
+  const TYPES = { club: 'Comedy club', bar_room: 'Bar room', brewery: 'Brewery room', improv: 'Improv theater', theater: 'Theater',
+    producer: 'Producer / recurring show', pop_up: 'Pop-up shows', one_night: 'One-night show', festival: 'Festival',
+    open_mic: 'Open mic venue', showcase: 'Showcase venue' };
+  const STATES = { AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',
+    DC:'Washington, DC',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
+    LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',
+    NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
+    OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',
+    TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming' };
+  let venues = [];
+  // Map positions come from the app's club search (public, like the list).
+  const pins = new Map();
+  let map = null;
+  let layer = null;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : null);
+
+  function render() {
+    const q = $('q').value.trim().toLowerCase();
+    const st = $('state').value;
+    const shown = venues.filter((v) => (!st || v.state === st) && (!q || (v.name + ' ' + (v.city || '')).toLowerCase().includes(q)));
+    const groups = {};
+    for (const v of shown) (groups[v.state || '—'] ||= []).push(v);
+    const order = Object.keys(groups).sort((a, b) => (STATES[a] || a).localeCompare(STATES[b] || b));
+    $('list').innerHTML = shown.length === 0
+      ? '<p class="empty">No venues match. Try another search or state.</p>'
+      : order.map((code) => `
+        <section class="state-group">
+          <h2>${esc(STATES[code] || code)} <span>${groups[code].length}</span></h2>
+          <ul class="rows">${groups[code].map((v) => {
+            const site = safeUrl(v.socials && v.socials.website);
+            const tix = safeUrl(v.ticket_url);
+            const logo = safeUrl(v.logo_url);
+            const initials = v.name.split(/\s+/).filter((w) => /\w/.test(w)).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+            const where = [v.city, v.state].filter(Boolean).join(', ');
+            return `<li><div class="row">
+              <span class="photo">${logo ? `<img src="${esc(logo)}" alt="" loading="lazy">` : `<span class="initials">${esc(initials)}</span>`}</span>
+              <span class="text">
+                <span class="title">${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</span>
+                <span class="line">${esc(TYPES[v.venue_type] || 'Comedy venue')}${where ? ' · ' + esc(where) : ''}</span>
+                ${v.show_days || (tix && tix !== site) ? `<span class="line">${esc(v.show_days || '')}${v.show_days && tix && tix !== site ? ' · ' : ''}${tix && tix !== site ? `<a href="${esc(tix)}" rel="noopener" target="_blank">Tickets</a>` : ''}</span>` : ''}
+              </span>
+              ${site ? `<a class="chev" href="${esc(site)}" rel="noopener" target="_blank" aria-label="${esc(v.name)} website">›</a>` : ''}
+            </div></li>`;
+          }).join('')}</ul>
+        </section>`).join('');
+    drawMap(shown);
+  }
+
+  // The venues shown in the list, on an OpenStreetMap map (no key needed).
+  function drawMap(shown) {
+    if (!window.L) return;
+    if (!map) {
+      map = L.map('map', { scrollWheelZoom: false }).setView([39.5, -98.35], 4);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+      layer = L.layerGroup().addTo(map);
+    }
+    layer.clearLayers();
+    const points = [];
+    for (const v of shown) {
+      const pin = pins.get(v.id);
+      if (!pin) continue;
+      const site = safeUrl(v.socials && v.socials.website);
+      const marker = L.circleMarker([pin.lat, pin.lng], { radius: 7, color: '#863C2D', weight: 2, fillColor: '#994433', fillOpacity: 0.9 });
+      marker.bindPopup(`<strong>${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</strong><br>${esc([v.city, v.state].filter(Boolean).join(', '))}`);
+      marker.addTo(layer);
+      points.push([pin.lat, pin.lng]);
+    }
+    if (points.length === 1) map.setView(points[0], 12);
+    else if (points.length > 1) map.fitBounds(points, { padding: [30, 30], maxZoom: 12 });
+  }
+
+  (async () => {
+    for (let from = 0; ; from += 1000) {
+      const r = await fetch(BASE + '/rest/v1/rpc/clubs_search?limit=1000&offset=' + from, {
+        method: 'POST',
+        headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat: null, lng: null, radius_miles: null, open_mic_only: false, state_filter: null }),
+      });
+      if (!r.ok) break;
+      const rows = await r.json();
+      for (const c of rows) if (c.latitude != null && c.longitude != null) pins.set(c.id, { lat: c.latitude, lng: c.longitude });
+      if (rows.length < 1000) break;
+    }
+    if (venues.length) render();
+  })().catch(() => {});
+
+  // The database sends at most 1,000 rows at a time: read the list in pages.
+  async function allClubs() {
+    const rows = [];
+    for (let from = 0; ; from += 1000) {
+      const r = await fetch(API + '&limit=1000&offset=' + from, { headers: { apikey: KEY, Authorization: 'Bearer ' + KEY } });
+      if (!r.ok) throw r.status;
+      const page = await r.json();
+      rows.push(...page);
+      if (page.length < 1000) return rows;
+    }
+  }
+  allClubs()
+    .then((rows) => {
+      venues = rows;
+      const states = [...new Set(rows.map((v) => v.state).filter(Boolean))].sort((a, b) => (STATES[a] || a).localeCompare(STATES[b] || b));
+      $('state').insertAdjacentHTML('beforeend', states.map((s) => `<option value="${esc(s)}">${esc(STATES[s] || s)}</option>`).join(''));
+      const plain = states.filter((s) => s !== 'DC').length;
+      $('summary').textContent = `${rows.length} clubs and venues in ${plain} states${states.includes('DC') ? ' and DC' : ''}, updated as the list changes.`;
+      render();
+    })
+    .catch(() => {
+      $('summary').textContent = 'The venue list couldn\'t load right now. Please try again later.';
+    });
+  $('q').addEventListener('input', render);
+  $('state').addEventListener('change', render);
+
+  // ---- Tabs: #tonight, #clubs, #open-mics, #festivals ----
+  const tabs = [...document.querySelectorAll('.switcher [role="tab"]')];
+  const map_ = () => map;
+  function show(name, push) {
+    for (const t of tabs) {
+      const on = t.id === 'tab-' + name;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    }
+    if (push) history.replaceState(null, '', '#' + name);
+    if (name === 'clubs' && map_()) setTimeout(() => map_().invalidateSize(), 50);
+    if (name === 'open-mics') loadMics();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => show(t.id.slice(4), true));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      const next = tabs[(i + d + tabs.length) % tabs.length];
+      next.focus(); show(next.id.slice(4), true);
+    });
+  });
+  const fromHash = () => {
+    const h = location.hash.slice(1);
+    return tabs.some((t) => t.id === 'tab-' + h) ? h : 'tonight';
+  };
+  addEventListener('hashchange', () => show(fromHash()));
+
+  const headers = { apikey: KEY, Authorization: 'Bearer ' + KEY, 'Content-Type': 'application/json' };
+  const stateOptions = (codes) => codes.sort((a, b) => (STATES[a] || a).localeCompare(STATES[b] || b))
+    .map((s) => `<option value="${esc(s)}">${esc(STATES[s] || s)}</option>`).join('');
+  const clock = (t) => {
+    if (!t) return { hm: 'TBA', ap: '' };
+    const [h, m] = t.split(':').map(Number);
+    return { hm: `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')}`, ap: h < 12 ? 'AM' : 'PM' };
+  };
+  const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const plusDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return ymd(d); };
+  const shortDay = (s) => new Date(s + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+
+  // ---- Tonight ----
+  let when = 'tonight';
+  let here = null;
+  let asked = false;
+  let tTimer = null;
+  $('t-state').insertAdjacentHTML('beforeend', stateOptions(Object.keys(STATES)));
+  function loadTonight() {
+    const st = $('t-state').value;
+    $('t-range-field').hidden = !!st;
+    if (!st && !here && !asked && navigator.geolocation) {
+      asked = true;
+      $('t-note').textContent = 'Finding shows near you…';
+      navigator.geolocation.getCurrentPosition(
+        (p) => { here = { lat: p.coords.latitude, lng: p.coords.longitude }; loadTonight(); },
+        () => { $('t-note').textContent = 'Allow your location to see shows near you, or pick a state.'; $('t-list').innerHTML = ''; },
+        { timeout: 10000, maximumAge: 600000 });
+      return;
+    }
+    if (!st && !here) {
+      $('t-note').textContent = 'Pick a state to see its shows, or allow your location for shows near you.';
+      $('t-list').innerHTML = '';
+      return;
+    }
+    const range = $('t-range').value;
+    const [from, to] = when === 'tonight' ? [plusDays(0), plusDays(0)] : when === 'tomorrow' ? [plusDays(1), plusDays(1)] : [plusDays(0), plusDays(6)];
+    $('t-note').textContent = 'Loading…';
+    fetch(BASE + '/rest/v1/rpc/shows_nearby', { method: 'POST', headers, body: JSON.stringify({
+      from_date: from, to_date: to,
+      lat: here && !st ? here.lat : null, lng: here && !st ? here.lng : null,
+      radius_miles: !st && here && range ? Number(range) : null,
+      in_state: st || null, search: $('t-q').value.trim() || null,
+    }) })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((rows) => {
+        const where = st ? `in ${STATES[st] || st}` : range ? `within ${range} miles` : 'near you';
+        const day = when === 'tonight' ? 'tonight' : when === 'tomorrow' ? 'tomorrow' : 'this week';
+        $('t-note').textContent = rows.length ? `${rows.length} show${rows.length === 1 ? '' : 's'} ${where} ${day}.` : '';
+        $('t-list').innerHTML = rows.length === 0
+          ? `<p class="empty">No shows listed ${where} ${day}. ${st ? 'Try another day.' : 'Try a longer distance, or pick a state.'}</p>`
+          : '<ul class="rows">' + rows.map((s) => {
+            const { hm, ap } = clock(s.start_time);
+            const tix = safeUrl(s.ticket_url);
+            const miles = s.distance_miles == null ? '' : ` · ${s.distance_miles < 10 ? s.distance_miles.toFixed(1) : Math.round(s.distance_miles)} mi`;
+            return `<li><div class="row">
+              <span class="time">${when === 'week' ? `<small>${esc(shortDay(s.show_date))}</small>` : ''}<b>${esc(hm)}</b><small>${esc(ap)}</small></span>
+              <span class="text">
+                <span class="title">${esc(s.title)}</span>
+                <span class="line">${esc([s.venue_name, s.city, s.state].filter(Boolean).join(' · '))}${miles}</span>
+                ${s.lineup ? `<span class="line">${esc(s.lineup)}</span>` : ''}
+                ${s.is_open_mic ? '<span class="line tag">Open mic</span>' : ''}
+              </span>
+              ${tix ? `<a class="tix" href="${esc(tix)}" rel="noopener" target="_blank">Tickets</a>` : ''}
+            </div></li>`;
+          }).join('') + '</ul>';
+      })
+      .catch(() => { $('t-note').textContent = 'Shows couldn\'t load right now. Please try again later.'; });
+  }
+  document.querySelectorAll('#p-tonight .chip').forEach((c) => c.addEventListener('click', () => {
+    document.querySelectorAll('#p-tonight .chip').forEach((x) => x.classList.toggle('on', x === c));
+    when = c.dataset.when; loadTonight();
+  }));
+  $('t-state').addEventListener('change', loadTonight);
+  $('t-range').addEventListener('change', loadTonight);
+  $('t-q').addEventListener('input', () => { clearTimeout(tTimer); tTimer = setTimeout(loadTonight, 350); });
+
+  // ---- Open mics ----
+  const NIGHTS = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'];
+  let mics = null;
+  let night = null;
+  $('m-nights').innerHTML = ['Any night', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    .map((n, i) => `<button class="chip${i === 0 ? ' on' : ''}" data-night="${i - 1}">${n}</button>`).join('');
+  document.querySelectorAll('#m-nights .chip').forEach((c) => c.addEventListener('click', () => {
+    document.querySelectorAll('#m-nights .chip').forEach((x) => x.classList.toggle('on', x === c));
+    night = c.dataset.night === '-1' ? null : Number(c.dataset.night); renderMics();
+  }));
+  function loadMics() {
+    if (mics) return;
+    mics = [];
+    fetch(BASE + '/rest/v1/open_mics?select=weekday,start_time,format,notes,last_confirmed_at,club:clubs(id,name,city,state,socials,logo_url)&order=weekday.asc,start_time.asc', { headers })
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((rows) => {
+        mics = rows.filter((m) => m.club);
+        const states = [...new Set(mics.map((m) => m.club.state).filter(Boolean))];
+        $('m-state').insertAdjacentHTML('beforeend', stateOptions(states));
+        $('m-summary').textContent = `${mics.length} weekly open mics at ${new Set(mics.map((m) => m.club.id)).size} venues.`;
+        renderMics();
+      })
+      .catch(() => { $('m-summary').textContent = 'Open mics couldn\'t load right now. Please try again later.'; });
+  }
+  function renderMics() {
+    if (!mics) return;
+    const q = $('m-q').value.trim().toLowerCase();
+    const st = $('m-state').value;
+    const shown = mics.filter((m) => (night === null || m.weekday === night) && (!st || m.club.state === st)
+      && (!q || (m.club.name + ' ' + (m.club.city || '')).toLowerCase().includes(q)));
+    const groups = {};
+    for (const m of shown) (groups[m.club.state || '—'] ||= []).push(m);
+    const order = Object.keys(groups).sort((a, b) => (STATES[a] || a).localeCompare(STATES[b] || b));
+    $('m-list').innerHTML = shown.length === 0
+      ? '<p class="empty">No open mics match. Try another night or state.</p>'
+      : order.map((code) => `
+        <section class="state-group">
+          <h2>${esc(STATES[code] || code)} <span>${groups[code].length}</span></h2>
+          <ul class="rows">${groups[code].map((m) => {
+            const { hm, ap } = clock(m.start_time);
+            const site = safeUrl(m.club.socials && m.club.socials.website);
+            return `<li><div class="row">
+              <span class="time"><small>${esc(NIGHTS[m.weekday].slice(0, 3))}</small><b>${esc(hm)}</b><small>${esc(ap)}</small></span>
+              <span class="text">
+                <span class="title">${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(m.club.name)}</a>` : esc(m.club.name)}</span>
+                <span class="line">${esc(NIGHTS[m.weekday])}${m.club.city ? ' · ' + esc(m.club.city) : ''}${m.format ? ' · ' + esc(m.format.replace(/_/g, ' ')) : ''}</span>
+                ${m.notes ? `<span class="line">${esc(m.notes)}</span>` : ''}
+              </span>
+            </div></li>`;
+          }).join('')}</ul>
+        </section>`).join('');
+  }
+  $('m-q').addEventListener('input', renderMics);
+  $('m-state').addEventListener('change', renderMics);
+
+  show(fromHash());
+  loadTonight();
+</script>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Stand Up Talent</span>
+    <nav aria-label="Footer">
+      <a href="shows.html">Shows</a>
+      <a href="plans.html">Plans</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="support.html">Help &amp; Support</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="delete-account.html">Delete account</a>
+      <a href="https://stand-up-talent.expo.app">Admin</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
