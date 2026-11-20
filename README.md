@@ -13,7 +13,7 @@ step.
 | A shared show | `show.html?id=<show>` (`assets/show-page.js`; the app's Share links here; `&beta=1` reads the Beta test data) |
 | Privacy Policy | `privacy.html` |
 | Terms of Use | `terms.html` |
-| Comedy venues | `venues.html` (reads the live venue list from the app's database with its public key) |
+| Shows | `shows.html`: Tonight, Clubs, Open Mics and Festivals (reads live from the app's database with its public key; `venues.html` redirects to the Clubs tab) |
 | Help & Support | `support.html` |
 | Not found | `404.html` |
 
