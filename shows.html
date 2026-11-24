@@ -107,7 +107,7 @@
   // Everything here is read live from the app's database with its public key
   // (the same one the app ships with); only public details are readable.
   const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
-  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,socials,ticket_url,logo_url,show_days&order=state.asc,name.asc';
+  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,venue_tags,socials,ticket_url,logo_url,show_days&order=state.asc,name.asc';
   const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
   const TYPES = { club: 'Comedy club', bar_room: 'Bar room', brewery: 'Brewery room', improv: 'Improv theater', theater: 'Theater',
     producer: 'Producer / recurring show', pop_up: 'Pop-up shows', one_night: 'One-night show', festival: 'Festival',
@@ -118,6 +118,11 @@
     NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
     OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',
     TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming' };
+  // Every tag a venue has, the main one first: "Comedy club · Open mic venue · Showcase venue".
+  const tagLine = (v) => {
+    const tags = Array.isArray(v.venue_tags) && v.venue_tags.length ? v.venue_tags : [v.venue_type];
+    return [...new Set(tags)].map((t) => TYPES[t]).filter(Boolean).join(' · ') || 'Comedy venue';
+  };
   let venues = [];
   // Map positions come from the app's club search (public, like the list).
   const pins = new Map();
@@ -149,7 +154,7 @@
               <span class="photo">${logo ? `<img src="${esc(logo)}" alt="" loading="lazy">` : `<span class="initials">${esc(initials)}</span>`}</span>
               <span class="text">
                 <span class="title">${site ? `<a href="${esc(site)}" rel="noopener" target="_blank">${esc(v.name)}</a>` : esc(v.name)}</span>
-                <span class="line">${esc(TYPES[v.venue_type] || 'Comedy venue')}${where ? ' · ' + esc(where) : ''}</span>
+                <span class="line">${where ? esc(where) + ' · ' : ''}${esc(tagLine(v))}</span>
                 ${v.show_days || (tix && tix !== site) ? `<span class="line">${esc(v.show_days || '')}${v.show_days && tix && tix !== site ? ' · ' : ''}${tix && tix !== site ? `<a href="${esc(tix)}" rel="noopener" target="_blank">Tickets</a>` : ''}</span>` : ''}
               </span>
               ${site ? `<a class="chev" href="${esc(site)}" rel="noopener" target="_blank" aria-label="${esc(v.name)} website">›</a>` : ''}
