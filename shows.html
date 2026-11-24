@@ -107,21 +107,22 @@
   // Everything here is read live from the app's database with its public key
   // (the same one the app ships with); only public details are readable.
   const BASE = 'https://fqyfwrzwzdafqqyygvvg.supabase.co';
-  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,venue_tags,socials,ticket_url,logo_url,show_days&order=state.asc,name.asc';
+  const API = BASE + '/rest/v1/clubs?select=id,name,city,state,venue_type,venue_tags,show_types,socials,ticket_url,logo_url,show_days&order=state.asc,name.asc';
   const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxeWZ3cnp3emRhZnFxeXlndnZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMzYxNzQsImV4cCI6MjA5NjkxMjE3NH0.MNAQlIOY8R1_rAPvTtMsJ1UsHgu15zilCJf8wMeD3iM';
-  const TYPES = { club: 'Comedy club', bar_room: 'Bar room', brewery: 'Brewery room', improv: 'Improv theater', theater: 'Theater',
-    producer: 'Producer / recurring show', pop_up: 'Pop-up shows', one_night: 'One-night show', festival: 'Festival',
-    open_mic: 'Open mic venue', showcase: 'Showcase venue' };
+  const TYPES = { club: 'Comedy Club', bar_room: 'Bar / Pub', improv: 'Improv Theater', theater: 'Theater', brewery: 'Brewery',
+    music_venue: 'Music Venue', function_hall: 'Function Hall', producer: 'Producer', recurring: 'Recurring Show', pop_up: 'Pop-up Shows',
+    one_night: 'One-night Shows', festival: 'Festivals', open_mic: 'Open Mics', showcase: 'Showcases', classes: 'Comedy Classes' };
   const STATES = { AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',
     DC:'Washington, DC',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
     LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',
     NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
     OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',
     TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming' };
-  // Every tag a venue has, the main one first: "Comedy club · Open mic venue · Showcase venue".
+  // Venue types first (the main one leads), then show types: "Comedy Club · Open Mics · Showcases".
   const tagLine = (v) => {
-    const tags = Array.isArray(v.venue_tags) && v.venue_tags.length ? v.venue_tags : [v.venue_type];
-    return [...new Set(tags)].map((t) => TYPES[t]).filter(Boolean).join(' · ') || 'Comedy venue';
+    const venue = Array.isArray(v.venue_tags) && v.venue_tags.length ? v.venue_tags : v.venue_type ? [v.venue_type] : [];
+    const shows = Array.isArray(v.show_types) ? v.show_types : [];
+    return [...new Set([...venue, ...shows])].map((t) => TYPES[t]).filter(Boolean).join(' · ') || 'Comedy venue';
   };
   let venues = [];
   // Map positions come from the app's club search (public, like the list).
